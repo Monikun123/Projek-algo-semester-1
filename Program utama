@@ -1,0 +1,38 @@
+import csv
+import os
+from pathlib import Path
+import pandas as pd
+def register():
+    os.system('cls')
+    with open('akun.csv', 'a', newline="") as f:
+        csvtambah = csv.writer(f)
+        username = input("Masukan username baru:")
+        password = input('Masukan password baru:')
+        password2 = input('Tolong masukan password lagi:')
+        if password == password2:
+            csvtambah.writerow([username,password])
+            print("Berhasil membuat akun baru")
+        else:
+            print('Coba lagi')
+            input("\nenter untuk lanjutkan")
+            register()
+def login():
+    username = input("masukan usernamemu:")
+    password = input('masukan passwordmu:')
+    Hasil = False
+    with open('akun.csv', 'r') as f:
+        reader = csv.reader(f, delimiter=",")
+        for x in reader:
+            if x == [username,password]:
+                Hasil = True
+                break
+            else:
+                Hasil = False
+        if Hasil == True:
+            print('Kamu berhasil masuk')
+            input("\nenter untuk lanjutkan")
+            menu()
+        elif Hasil == False:
+            print("Gagal login, tolong mencoba lagi")
+            input("\nenter untuk lanjutkan")
+            login()
