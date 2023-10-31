@@ -36,3 +36,16 @@ def login():
             print("Gagal login, tolong mencoba lagi")
             input("\nenter untuk lanjutkan")
             login()
+
+def loginorRegister():
+    LoginorRegister = int(input('Apakah masuk pake akun yang ada atau register akun terlebih dahulu(1/2):'))
+    if LoginorRegister == 2:
+            if not(Path('akun.csv').is_file()): # Membuat file csv baru
+                with open('akun.csv','w', newline='') as filecsv:
+                 header = csv.DictWriter(filecsv, fieldnames=['username', 'password'], delimiter = ',')
+                 header.writeheader()
+            register()
+            input("\n enter untuk kembali ke menu login dan register")
+            loginorRegister()
+    if LoginorRegister == 1:
+                login()
