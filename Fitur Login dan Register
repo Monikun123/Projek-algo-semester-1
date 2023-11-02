@@ -4,18 +4,32 @@ from pathlib import Path
 import pandas as pd
 def register():
     os.system('cls')
-    with open('akun.csv', 'a', newline="") as f:
-        csvtambah = csv.writer(f)
-        username = input("Masukan username baru:")
-        password = input('Masukan password baru:')
-        password2 = input('Tolong masukan password lagi:')
-        if password == password2:
-            csvtambah.writerow([username,password])
-            print("Berhasil membuat akun baru")
+    username = input("Masukan username baru:")
+    password = input('Masukan password baru:')
+    password2 = input('Tolong masukan password lagi:')
+    Hasil = False
+    with open('akun.csv','r') as r:
+     reader = csv.reader(r)
+     for x in reader:
+        if x[0] == username:
+          Hasil = True
+          break
         else:
-            print('Coba lagi')
-            input("\nenter untuk lanjutkan")
-            register()
+            Hasil = False
+     if Hasil == False:
+          with open('akun.csv', 'a', newline="") as f:
+                 csvtambah = csv.writer(f)
+                 if password == password2:
+                    csvtambah.writerow([username,password])
+                    print("Berhasil membuat akun baru")
+                 else:
+                    print('Pengetikan password lagi salah, Coba lagi')
+                    input("\nenter untuk lanjutkan")
+                    register()
+     elif Hasil == True:
+         print("Username sudah ada di database, tolong coba lagi")
+         input("\nenter untuk lanjutkan")
+         register()
 def login():
     username = input("masukan usernamemu:")
     password = input('masukan passwordmu:')
@@ -31,12 +45,11 @@ def login():
         if Hasil == True:
             print('Kamu berhasil masuk')
             input("\nenter untuk lanjutkan")
-            menu()
+            # menu()
         elif Hasil == False:
             print("Gagal login, tolong mencoba lagi")
             input("\nenter untuk lanjutkan")
             login()
-
 def loginorRegister():
     LoginorRegister = int(input('Apakah masuk pake akun yang ada atau register akun terlebih dahulu(1/2):'))
     if LoginorRegister == 2:
@@ -49,3 +62,5 @@ def loginorRegister():
             loginorRegister()
     if LoginorRegister == 1:
                 login()
+
+loginorRegister()
