@@ -1,0 +1,17 @@
+def MenampilkanStok():
+    df = pd.read_csv('stock.csv')
+    df.index =  range(1,len(df) + 1,)
+    print(df)
+def MenambahkanStok():
+    os.system('cls')
+    MenampilkanStok()
+    df = pd.read_csv('stock.csv')
+    Pilihan = int(input("Pilih bunga yang stoknya mau ditambahkan:"))
+    Stok = int(df.iloc[Pilihan-1,2])
+    Tambah = int(input('Stock ditambahkan berapa banyak:'))
+    StokBaru = Stok + Tambah
+    print(StokBaru)
+    df.at[Pilihan-1, 'Stok'] = StokBaru
+    df.to_csv('stock.csv', index=False)
+    MenampilkanStok()
+    print("Stok berhasil ditambah")
