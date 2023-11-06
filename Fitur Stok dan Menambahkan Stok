@@ -1,4 +1,26 @@
+import pandas as pd
+import os
+import csv
+from pathlib import Path
+def membuatStok():
+    if not(Path('stock.csv').is_file()): # Membuat file csv baru
+                with open('stock.csv','w', newline='') as filecsv:
+                 header = csv.DictWriter(filecsv, fieldnames=['Bunga', 'Harga','Stok'], delimiter = ',')
+                 header.writeheader()
+                with open('stock.csv','a',newline="") as file:
+                 csvwriter = csv.writer(file)
+                 csvwriter.writerow(['Mawar',1500,50])
+                 csvwriter.writerow(['Baby Breath',2000,50])
+                 csvwriter.writerow(['Hydrangea',2500,50])
+                 csvwriter.writerow(['Peony',2500,50])
+                 csvwriter.writerow(['Garbera',1500,50])
+                 csvwriter.writerow(['Lily of the Valley',2000,50])
+                 csvwriter.writerow(['Calla Lily',2000,50])
+                 csvwriter.writerow(['Gardenia',1500,50])
+                 csvwriter.writerow(['Tulip',1500,50])
+                 csvwriter.writerow(['Matahari',2000,50])
 def MenampilkanStok():
+    membuatStok()
     df = pd.read_csv('stock.csv')
     df.index =  range(1,len(df) + 1,)
     print(df)
@@ -15,3 +37,4 @@ def MenambahkanStok():
     df.to_csv('stock.csv', index=False)
     MenampilkanStok()
     print("Stok berhasil ditambah")
+MenambahkanStok()
