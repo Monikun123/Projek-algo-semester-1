@@ -1,21 +1,24 @@
 def mengurangikeranjang():
     getData()
     pf = pd.read_csv('keranjang.csv')
-    print(pf)
     pilihan = int(input('Pilih barang yang ingin dikurangin:'))
     Stok = int(pf.iloc[pilihan-1,1])
     Kurang = int(input('Jumlah barang dikurangi berapa banyak:'))
     StokBaru = Stok - Kurang
+    pf.iloc[pilihan-1,1] = StokBaru
     total_pembelian = 0
-    total_harga = pf.iloc[pilihan-1,1] * pf.iloc[pilihan-2]
-    pf.at[pilihan-1,'Jumlah'] = StokBaru
-    pf.at[pilihan-1,'TotalHarga'] = total_harga
+    total_harga = int(pf.iloc[pilihan-1,1]) * int(pf.iloc[pilihan-1,2])
+    pf.iloc[pilihan-1, 3] = total_harga
     pf.to_csv('keranjang.csv', index=False)
-    for x in range(len(pf)+1):
+    for x in range(len(pf)):
              total_pembelian += pf.iloc[x,3]
     nama_bunga = pf.iloc[pilihan-1,0]
     df = pd.read_csv('stock.csv')
-    index = df.loc[df['Bunga'] == nama_bunga].index
-    StokBaru2 = df.loc[index,'Stok'] + Stok
-    df.at[index,'Stok'] = StokBaru2
+    suri = df.loc[df['Bunga'] == nama_bunga].index
+    suri = suri.values
+    suri = suri[0]
+    StokBaru2 = df.loc[suri,'Stok'] + Kurang
+    df.loc[suri,'Stok'] = StokBaru2
     df.to_csv('stock.csv', index=False)
+    getData()
+    print(f'total harga semuanya:{total_pembelian}')
