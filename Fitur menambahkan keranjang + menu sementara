@@ -21,7 +21,10 @@ def addData():
          writer = csv.writer(f)
          writer.writerow([bunga,jumlah,harga,total_harga])
          f.close()
-         for x in range(len(pf)+1):
+         pf = pd.read_csv('keranjang.csv')
+         print(pf)
+         for x in range(len(pf)):
+             print(x)
              total_pembelian += pf.iloc[x,3]
          getData()
          print(f'total harga semuanya:{total_pembelian}')
