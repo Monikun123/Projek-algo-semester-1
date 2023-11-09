@@ -1,0 +1,46 @@
+def addData():
+    MenampilkanStok()
+    df = pd.read_csv('stock.csv')
+    Pilihan = int(input("Menambahkan barang ke berapa:"))
+    jumlah = int(input('Beli berapa:'))
+    if jumlah > int(df.iloc[Pilihan-1, 2]):
+         print('Mohon maaf, stok lagi habis, tolong coba ulang')
+         addData()
+    else:
+        df = pd.read_csv('stock.csv')
+        StokBaru = df.iloc[Pilihan-1,2] - jumlah
+        print(StokBaru)
+        df.at[Pilihan-1, 'Stok'] = StokBaru
+        df.to_csv('stock.csv', index=False)
+        with open('keranjang.csv','a',newline="") as f:
+         pf = pd.read_csv('keranjang.csv')
+         total_pembelian = 0
+         bunga = df.iloc[Pilihan-1,0]
+         harga = df.iloc[Pilihan-1,1]
+         total_harga = harga * jumlah
+         writer = csv.writer(f)
+         writer.writerow([bunga,jumlah,harga,total_harga])
+         f.close()
+         for x in range(len(pf)+1):
+             total_pembelian += pf.iloc[x,3]
+         getData()
+         print(f'total harga semuanya:{total_pembelian}')
+         print('Barang berhasil dimasukan di dalam keranjang')
+         input("\nenter untuk melanjutkan")
+
+             
+         
+
+def getData():
+    df = pd.read_csv("keranjang.csv")
+    df.index = range(1, len(df) + 1)
+    print(df)
+def menu():
+    listmenu = input("[1. tambah data][2.lihat data][3.edit data][4.hapus data][5.keluar] masukkan menu:")    
+    if listmenu == '1':
+        if not(Path('keranjang.csv').is_file()):
+            #buat file dahulu sebelum mengakses fungsi tambah supaya bisa menambahkan header dulu
+            with open('keranjang.csv', 'w', newline='') as filecsv:
+                header = csv.DictWriter(filecsv, fieldnames=['Bunga','Jumlah','Harga','Total Harga'],  delimiter=',') 
+                header.writeheader()
+        addData()
