@@ -1,0 +1,306 @@
+import csv
+import os
+import pandas as pd
+from pathlib import Path
+
+def register():
+    os.system('cls')
+    print(51*"=")
+    print(20*" ","REGISTER")
+    print(51*"=")
+
+    username = input("\nMasukan username baru :")
+    password = input('Masukan password baru :')
+    password2 = input('konfirmasi password :')
+    Hasil = False
+    with open('akun.csv','r') as r:
+     reader = csv.reader(r)
+     for x in reader:
+        if x[0] == username:
+          Hasil = True
+          break
+        else:
+            Hasil = False
+     if Hasil == False:
+        with open('akun.csv', 'a', newline="") as f:
+         os.system('cls')
+         csvtambah1 = csv.writer(f)
+         if password == password2:
+            csvtambah1.writerow([username,password])
+            print("Berhasil membuat akun baru")
+         else:
+                print('password salah, Coba lagi')
+                input("\nenter untuk lanjutkan")
+                register()
+     elif Hasil == True:
+         print("Username sudah digunakan , tolong coba lagi")
+         input("\nenter untuk lanjutkan")
+         register()
+
+def Login ():
+    os.system('cls')
+    print(51*"=")
+    print(20*" ","LOGIN")
+    print(51*"=")
+
+    username = input("\nMasukan Usernamemu : ")
+    password = input("Masukan Passwordmu : ")
+    Hasil = False
+    with open('akun.csv', 'r') as f:
+        reader = csv.reader(f, delimiter=",")
+        for x in reader:
+            if x == [username,password]:
+                Hasil = True
+                break
+            else:
+                Hasil = False
+        if Hasil == True:
+            print('\n=====| Anda Berhasil Masuk |=====')
+            input("\nEnter untuk lanjutkan")
+            menu()
+        elif Hasil == False:
+            print("\n======| Maaf anda gagal login, coba lagi ! |======")
+            input("\nEnter untuk lanjutkan")
+            MenuLogin()
+    
+
+def Admin ():
+    os.system('cls')
+    print(51*"=")
+    print(20*" ","LOGIN ADMIN")
+    print(51*"=")
+
+    username = input("\nMasukan Usernamemu : ")
+    password = input("Masukan Passwordmu : ")
+    Hasil = False
+    with open('admin.csv', 'r') as f:
+        reader = csv.reader(f, delimiter=",")
+        for x in reader:
+            if x == [username,password]:
+                Hasil = True
+                break
+            else:
+                Hasil = False
+        if Hasil == True:
+            print('\n=====| Selamat Datang Admin |=====')
+            input("\nEnter untuk lanjutkan")
+            MenuAdmin()
+        elif Hasil == False:
+            print("\n======| Maaf anda gagal login, coba lagi ! |======")
+            input("\nEnter untuk lanjutkan")
+            MenuLogin()
+def MenuLogin():
+    os.system('cls')
+    print("="* 51)
+    print(2*' ',"SELAMAT DATANG DI APLIKASI TOKO BUNGA FLOMART ")
+    print("="*51)
+    print("\n1. LOGIN")
+    print("\n2. REGISTER")
+    print("\n3. LOGIN ADMIN")
+
+    input_menulogin = input("\nMasukkan Pilihan (1/2/3): ")
+    if input_menulogin == "1" :
+        Login()
+    elif input_menulogin == "2" :
+     if not(Path('akun.csv').is_file()): # Membuat file csv baru
+                with open('akun.csv','w', newline='') as filecsv:
+                 header = csv.DictWriter(filecsv, fieldnames=['username', 'password'], delimiter = ',')
+                 header.writeheader()
+                register()
+                input("\nEnter untuk melanjutkan")
+                MenuLogin()
+     else:
+        register()
+        input("\nEnter untuk melanjutkan")
+        MenuLogin()
+
+    elif input_menulogin == "3":
+        Admin()
+    else :
+        print("=====| inputan salah, coba lagi ! |=====")
+        MenuLogin()
+
+    
+
+def MenuAdmin():
+    os.system('cls')
+    print("="* 51)
+    print(2*' ',"SELAMAT DATANG ADMIN TOKO BUNGA FLOMART ")
+    print("="*51)
+    print("\n1. Menambah Stok")
+    print("\n2. Mengurangi Stok")
+    print("\n3. Riwayat")
+
+    input_menulogin = input("\nMasukkan Pilihan (1/2/3): ")
+    if input_menulogin == "1" :
+        MenambahkanStok()
+    elif input_menulogin == "2" :
+        mengurangiStok()
+    elif input_menulogin == '3':
+        Riwayat()
+
+def membuatStok():
+    if not(Path('stock.csv').is_file()): # Membuat file csv baru
+                with open('stock.csv','w', newline='') as filecsv:
+                 header = csv.DictWriter(filecsv, fieldnames=['Bunga', 'Harga','Stok'], delimiter = ',')
+                 header.writeheader()
+                with open('stock.csv','a',newline="") as file:
+                 csvwriter = csv.writer(file)
+                 csvwriter.writerow(['Mawar',1500,50])
+                 csvwriter.writerow(['Baby Breath',2000,50])
+                 csvwriter.writerow(['Hydrangea',2500,50])
+                 csvwriter.writerow(['Peony',2500,50])
+                 csvwriter.writerow(['Garbera',1500,50])
+                 csvwriter.writerow(['Lily of the Valley',2000,50])
+                 csvwriter.writerow(['Calla Lily',2000,50])
+                 csvwriter.writerow(['Gardenia',1500,50])
+                 csvwriter.writerow(['Tulip',1500,50])
+                 csvwriter.writerow(['Matahari',2000,50])
+def MenampilkanStok():
+    membuatStok()
+    df = pd.read_csv('stock.csv')
+    df.index =  range(1,len(df) + 1,)
+    print(df)
+def MenambahkanStok():
+    os.system('cls')
+    MenampilkanStok()
+    df = pd.read_csv('stock.csv')
+    Pilihan = int(input("Pilih bunga yang stoknya mau ditambahkan:"))
+    Stok = int(df.iloc[Pilihan-1,2])
+    Tambah = int(input('Stock ditambahkan berapa banyak:'))
+    StokBaru = Stok + Tambah
+    print(StokBaru)
+    df.at[Pilihan-1, 'Stok'] = StokBaru
+    df.to_csv('stock.csv', index=False)
+    MenampilkanStok()
+    print("Stok berhasil ditambah")
+    input("\n enter untuk kembali ke menu admin")
+    MenuAdmin()
+    
+# MenambahkanStok()
+def mengurangiStok():
+    os.system('cls')
+    MenampilkanStok()
+    df = pd.read_csv('stock.csv')
+    Pilihan = int(input("Pilih bunga yang stoknya mau dikurangi:"))
+    Stok = int(df.iloc[Pilihan-1,2])
+    Kurang = int(input('Stock dikurangi berapa banyak:'))
+    StokBaru = Stok - Kurang
+    print(StokBaru)
+    df.at[Pilihan-1, 'Stok'] = StokBaru
+    df.to_csv('stock.csv', index=False)
+    MenampilkanStok()
+    print("Stok berhasil dikurangi")
+    input("\n enter untuk kembali ke menu admin")
+    MenuAdmin()
+    
+
+def Riwayat ():
+    os.system('cls')
+    print("ini adalah sebuah riwayat pembelian") 
+
+def Keranjang ():
+    os.system('cls')
+    print(51*'=')
+    print(17*" ","SELAMAT BERBELANJA")
+    print(51*'=')
+    print("\n1. BUNGA MAWAR\n2. BUNGA MELATI\n3. BUNGA LILI")
+def mengurangikeranjang():
+    os.system('cls')
+    getData()
+    pf = pd.read_csv('keranjang.csv')
+    pilihan = int(input('Pilih barang yang ingin dikurangin:'))
+    Stok = int(pf.iloc[pilihan-1,1])
+    Kurang = int(input('Jumlah barang dikurangi berapa banyak:'))
+    StokBaru = Stok - Kurang
+    pf.iloc[pilihan-1,1] = StokBaru
+    total_pembelian = 0
+    total_harga = int(pf.iloc[pilihan-1,1]) * int(pf.iloc[pilihan-1,2])
+    pf.iloc[pilihan-1, 3] = total_harga
+    pf.to_csv('keranjang.csv', index=False)
+    for x in range(len(pf)):
+             total_pembelian += pf.iloc[x,3]
+    nama_bunga = pf.iloc[pilihan-1,0]
+    df = pd.read_csv('stock.csv')
+    suri = df.loc[df['Bunga'] == nama_bunga].index
+    suri = suri.values
+    suri = suri[0]
+    StokBaru2 = df.loc[suri,'Stok'] + Kurang
+    df.loc[suri,'Stok'] = StokBaru2
+    df.to_csv('stock.csv', index=False)
+    os.system('cls')
+    getData()
+    print(f'total harga semuanya:{total_pembelian}')
+
+
+
+
+
+
+def addData():
+    os.system('cls')
+    MenampilkanStok()
+    df = pd.read_csv('stock.csv')
+    Pilihan = int(input("Menambahkan barang ke berapa:"))
+    jumlah = int(input('Beli berapa:'))
+    if jumlah > int(df.iloc[Pilihan-1, 2]):
+         print('Mohon maaf, stok lagi habis, tolong coba ulang')
+         addData()
+    else:
+        df = pd.read_csv('stock.csv')
+        StokBaru = df.iloc[Pilihan-1,2] - jumlah
+        print(StokBaru)
+        df.at[Pilihan-1, 'Stok'] = StokBaru
+        df.to_csv('stock.csv', index=False)
+        with open('keranjang.csv','a',newline="") as f:
+         pf = pd.read_csv('keranjang.csv')
+         total_pembelian = 0
+         bunga = df.iloc[Pilihan-1,0]
+         harga = df.iloc[Pilihan-1,1]
+         total_harga = harga * jumlah
+         writer = csv.writer(f)
+         writer.writerow([bunga,jumlah,harga,total_harga])
+         f.close()
+         pf = pd.read_csv('keranjang.csv')
+         for x in range(len(pf)):
+             print(x)
+             total_pembelian += pf.iloc[x,3]
+         os.system('cls')
+         getData()
+         print(f'total harga semuanya:{total_pembelian}')
+         print('Barang berhasil dimasukan di dalam keranjang')
+         input("\nenter untuk melanjutkan")
+
+             
+         
+
+def getData():
+    pf = pd.read_csv("keranjang.csv")
+    pf.index = range(1, len(pf) + 1)
+    print(pf)
+def menu():
+    listmenu = input("[1. tambah data][2.menghapus data seberapa][3.edit data][4.hapus data][5.keluar] masukkan menu:")    
+    if listmenu == '1':
+        if not(Path('keranjang.csv').is_file()):
+            #buat file dahulu sebelum mengakses fungsi tambah supaya bisa menambahkan header dulu
+            with open('keranjang.csv', 'w', newline='') as filecsv:
+                header = csv.DictWriter(filecsv, fieldnames=['Bunga','Jumlah','Harga','Total Harga'],  delimiter=',') 
+                header.writeheader()
+        addData()
+    elif listmenu == '2':
+        mengurangikeranjang()
+def MenambahBarang():
+    return 
+def MengeditBarang():
+    return
+def MenghapusBarang():
+    return
+def MenampilkanKeranjang():
+    return
+def Bayar():
+    return 
+def Simpan():
+    return
+
+
+MenuLogin()
