@@ -1,0 +1,17 @@
+import pandas as pd
+import csv
+
+
+username = input('masukkan username')
+data = pd.read_csv("coba.csv")
+# print(data.iloc[0,0])
+# for i in range(0,3):
+#     if data.iloc[i,0] == username:
+#         print(data.iloc[i:i+1])
+#     else:
+#         pass
+data.head()
+# print(data.username == username)
+a = (data[data.username.str.startswith(username)])
+a = a.iloc[:, 1:3]
+print(a)
