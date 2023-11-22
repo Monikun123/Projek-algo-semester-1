@@ -1,0 +1,30 @@
+def KurangiJumlahBarang(username):
+    os.system('cls')
+    print("="* 51)
+    print(15*' ',"MENGURANGI JUMLAH BARANG")
+    print("="*51)
+
+    MenampilkanKeranjang(username)
+    print(51*"=")
+    pf = pd.read_csv('keranjang.csv')
+    print(pf)
+
+    pf['Username'] = pf['Username'].astype(str)  # Convert to string type
+    a = pf[pf['Username'].str.startswith(str(username))]
+    a = a.iloc[:, 1:5]
+    pilihan = int(input('\nPilih Nomor Barang Yang Ingin Dikurangi:'))
+    Kurang = int(input('Jumlah Barang Yang Ingin Dikurangi: '))
+    bunga = a.iloc[pilihan-1,0]
+    print(bunga)
+    NoIndex = a.index[pilihan-1]
+    print(NoIndex)
+    jumlah = int(a.iloc[pilihan-1,1])
+    harga = int(a.iloc[pilihan-1, 2])
+    JumlahBaru = jumlah - Kurang
+    total_hargabaru = harga * JumlahBaru
+    pf.iloc[NoIndex,2] = JumlahBaru
+    pf.iloc[NoIndex,4]  = total_hargabaru
+    pf.to_csv('keranjang.csv', index=False)
+    MenampilkanKeranjang(username)
+
+KurangiJumlahBarang(username)
