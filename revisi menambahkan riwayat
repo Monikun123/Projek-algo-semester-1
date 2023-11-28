@@ -1,0 +1,8 @@
+b = 0
+        for x in range(len(bunga)):
+        
+            if b == 0:
+             Bunga += f"{bunga[x]}:{jumlahbunga[x]}"
+            elif b > 0:
+                Bunga += ','+ f'{bunga[x]}:{jumlahbunga[x]}'
+            b += 1
